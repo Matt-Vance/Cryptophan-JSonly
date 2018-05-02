@@ -1,0 +1,620 @@
+﻿
+
+
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(248, 248, 248, 1.0);
+}
+
+.hide {
+    display: none;
+}
+
+.main-title {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 50px;
+    font-weight: 100;
+    letter-spacing: 3px;
+    text-transform: lowercase;
+    padding: 20px 0;
+}
+
+
+.header {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    padding: 10px 0px;
+    background-color: rgba(248, 248, 248, 1.0);
+    align-content: center;
+}
+
+.date-all {
+    display: flex;
+    flex: 1;
+}
+
+.circle-num {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 30px;
+}
+
+.circle {
+    border: 4px solid;
+    height: 80px;
+    width: 80px;
+    -moz-border-radius: 75px;
+    -webkit-border-radius: 75px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #1aaaba;
+}
+
+    .circle p {
+        font-size: 42px;
+        font-weight: 700;
+        color: #1aaaba;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+.date {
+    font-size: 32px;
+    letter-spacing: 3px;
+    margin-left: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 100;
+}
+
+.date-info {
+    color: #888;
+}
+
+.nav {
+    height: 100%;
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+    .nav li {
+        list-style-type: none;
+        display: inline-block;
+        font-family: 'Quicksand', sans-serif;
+        text-transform: lowercase;
+        font-size: 20px;
+        font-weight: 100;
+        letter-spacing: 1px;
+        margin: 4px 10px;
+        cursor: pointer;
+    }
+
+
+    .nav li {
+        text-decoration: none;
+        color: #333;
+    }
+
+        .nav li:hover {
+            color: #1aaaba;
+        }
+
+.title {
+    font-weight: 700;
+    color: #999;
+}
+
+.main-data {
+    display: flex;
+    width: 100%;
+}
+
+.input-container {
+    display: flex;
+    flex-wrap: no-wrap;
+    flex: 1;
+    width: 50%;
+    align-items: center;
+    padding: 0 20px;
+    margin: 0 0px;
+    background-color: #1aaaba;
+}
+
+    .input-container h2 {
+        margin: 0 20px 20px 20px;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 32px;
+        font-weight: 100;
+        color: #eee;
+        border-bottom: 1px solid #eee;
+    }
+
+.coinEntry {
+    border: none;
+    border-bottom: white solid 1px;
+    padding: 15px 20px;
+    margin: 0 10px;
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+    flex: 2;
+    width: 75%;
+}
+
+    .coinEntry::placeholder {
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    .coinEntry:focus {
+        outline: none;
+    }
+
+.output-container {
+    display: flex;
+    flex: 1;
+    padding: 0 20px;
+    background-color: rgb(20, 100, 125);
+    color: white;
+    align-items: center;
+    margin: 0 0px;
+}
+
+    .output-container h2 {
+        margin: 0 auto 20px auto;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 32px;
+        font-weight: 100;
+        color: white;
+        border-bottom: 1px solid white;
+        text-align: center;
+    }
+
+.submit {
+    flex: 1;
+    height: 50px;
+    margin: 20px 0px;
+    padding: 10px 20px 10px 20px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.25);
+    border: 2px solid white;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+    .submit:hover {
+        background-color: #ddd;
+        border-color: #ddd;
+        color: #1aaaba;
+    }
+
+#price-container {
+    display: none;
+}
+
+#date-container {
+    display: none;
+}
+
+.data-container {
+    display: flex;
+    align-items: center;
+}
+
+#dateEntry1, #dateEntry2, #dateEntry3 {
+    display: none;
+}
+
+.currentPrice-container {
+    flex: 5;
+    display: flex;
+    justify-content: space-around;
+    margin: 0 50px;
+    padding: 15px 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 24px;
+}
+
+.currentPriceOutput {
+    margin-right: 20px;
+}
+
+.dateSamePrice-container {
+    display: flex;
+    margin: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 24px;
+}
+
+.recentSamePriceOutput {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.earliestSamePriceOutput {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.radio1 {
+    width: 100%;
+    position: relative;
+    top: -400px;
+    left: 200px;
+}
+
+    .radio1 input {
+        display: none;
+    }
+
+    .radio1 label {
+        font-family: sans-serif;
+        font-weight: lighter;
+        font-size: 12px;
+        color: #bfbfbf;
+        cursor: pointer;
+        content: '';
+    }
+
+        .radio1 label:before {
+            content: '';
+            display: inline-block;
+            background: #1aaaba;
+            height: 15px;
+            width: 15px;
+            margin-right: 0px;
+            border-radius: 80%;
+            box-shadow: 0px 1px 0 0 rgba(0, 0, 0, .2);
+            box-sizing: border-box;
+            border: 7.5px solid #fff;
+            transition: border .3s ease;
+        }
+
+    .radio1 input:checked + label:before {
+        border-color: #fff;
+        border-width: 2px;
+    }
+
+    .radio1 input + label {
+        transition: color .7s ease;
+    }
+
+    .radio1 input:checked + label {
+        color: #000;
+    }
+
+.radio1-text {
+    position: absolute;
+    margin: 4px;
+    top: -2px;
+}
+
+.radio2 {
+    width: 100%;
+    position: relative;
+    top: -400px;
+    left: 200px;
+}
+
+    .radio2 input {
+        display: none;
+    }
+
+    .radio2 label {
+        font-family: sans-serif;
+        font-weight: lighter;
+        font-size: 12px;
+        color: #bfbfbf;
+        cursor: pointer;
+        content: '';
+    }
+
+        .radio2 label:before {
+            content: '';
+            display: inline-block;
+            background: #1aaaba;
+            height: 15px;
+            width: 15px;
+            margin-right: 0px;
+            border-radius: 80%;
+            box-shadow: 0px 1px 0 0 rgba(0, 0, 0, .2);
+            box-sizing: border-box;
+            border: 7.5px solid #fff;
+            transition: border .3s ease;
+        }
+
+    .radio2 input:checked + label:before {
+        border-color: #fff;
+        border-width: 2px;
+    }
+
+    .radio2 input + label {
+        transition: color .7s ease;
+    }
+
+    .radio2 input:checked + label {
+        color: #000;
+    }
+
+.radio2-text {
+    position: absolute;
+    margin: 4px;
+    top: -2px;
+}
+
+.rangeslider,
+input[type='range'] {
+    max-width: 400px;
+    flex: 6;
+}
+
+.rangeslider__handle {
+    line-height: 100px;
+    text-align: center;
+    color: #999;
+}
+    .rangeslider__handle:after {
+        background: 0;
+    }
+
+.rangeslider__fill {
+    background: rgba(180, 230, 230, 0.8);
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.main-filter {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.dayEntry {
+    width: 110px;
+    margin-left: 10px;
+    padding: 0 10px;
+    border: none;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+    background: #e6e6e6;
+    border-radius: 10px;
+    color: #333;
+    text-align: center;
+}
+
+    .dayEntry:focus {
+        outline: none;
+        border: none;
+    }
+
+.filter {
+    position: relative;
+    background:;
+    margin: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 32px;
+    color: #999;
+    text-align: center;
+}
+
+.filter1 {
+    position: relative;
+}
+
+#myDiv {
+    width: 100%;
+}
+
+
+
+@media screen and (max-width: 1650px) {
+
+    .date {
+        font-size: 24px;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+
+    .date {
+        display: none;
+    }
+
+    .input-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .output-container {
+        flex-direction: column;
+    }
+
+    .currentPrice-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 0 0px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 680px) {
+
+    .main-data {
+        flex-direction: column;
+        background: olive;
+    }
+
+    .input-container {
+        width: 100%;
+    }
+
+    .output-container {
+        width: 100%;
+    }
+
+    .header {
+        flex-direction: column;
+    }
+
+    .date-all {
+        display: none;
+    }
+}
+
+body {
+    font-size: 15px;
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #333;
+}
+
+path {
+    cursor: pointer;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto
+}
+
+.pie-container {
+    display: flex;
+    flex-direction:;
+    width: 100%;
+}
+
+#pieChart {
+    flex: 1;
+    display: flex;
+}
+
+.pieInner {
+    width: 300px;
+    height: 200px;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+.text-container {
+    /* border: 1px dotted; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#segmentText {
+    width: 100%;
+    padding: 20px;
+    text-align: centre;
+}
+
+path.slice {
+    stroke-width: 2px;
+}
+
+polyline {
+    opacity: .3;
+    stroke: black;
+    stroke-width: 2px;
+    fill: none;
+}
+
+.labelValue {
+    font-size: 60%;
+    opacity: .5;
+}
+
+.arcLabel {
+    font: 20px sans-serif;
+    fill: #000;
+}
+
+.pieText {
+    text-align: center;
+    width: 50%;
+}
+
+    .pieText p {
+        background-color: rgba(100,150,200,0.5);
+        text-align: center;
+        font-size: 24px;
+        padding: 10px;
+        margin: 2px;
+        min-width: 350px;
+        color: rgb(255,255,255);
+        font-family: 'Quicksand', sans-serif;
+        display: flex;
+        justify-content: flex-start;
+        position: relative;
+        z-index: 0;
+    }
+
+#p-coin0 {
+    display: none;
+}
+
+.denomCurrency {
+    display: flex;
+    height: 35px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.denomCurrency-buttons {
+    width: 75px;
+    border: none;
+    border-right: 1px solid white;
+    cursor: pointer;
+    background: lightblue;
+    color: #999;
+}
+
+    .denomCurrency-buttons:hover {
+        background: darkgrey;
+        color: white;
+    }
+
+.denomActive {
+    background: #1aaaba;
+    color: white;
+}
+
+.denomCurrency-buttons:focus {
+    outline: none;
+    border: none;
+}
+
+#denomButton-USD {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+#denomButton-ETH {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
