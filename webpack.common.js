@@ -4,8 +4,27 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const buildPath = path.resolve(__dirname, 'dist');
 
 module.exports = {
+    module: {
+        rules: [
+          {
+            test: /\.css$/,
+            use: [
+              "style-loader",
+              "css-loader"
+            ]
+          },
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            options: {
+                presets: ['@babel/preset-env']
+            }
+        },
+        ]
+      },
   entry: {
-    app: './src/index.js',
+    index: './src/index.js',
   },
   output: {
     filename: '[name].js',

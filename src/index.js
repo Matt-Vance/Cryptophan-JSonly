@@ -1,3 +1,7 @@
+require('normalize.css/normalize.css');
+require ('./styles.css');
+const {convertDateFormat, getDayNumber, getWeekDay, getMonthName} = require ('./dateFunctions.js');
+
 ethereumAddresses = [];
 samePrice = [];
 allTimeHighPrice = 0;

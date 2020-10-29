@@ -140,3 +140,5 @@ function convertDateFormat(input) {
     input.substr(11, 4) + "-" + convertMonth + "-" + input.substr(8, 2);
   return trialConvert;
 }
+
+module.exports = {convertDateFormat, getDayNumber, getWeekDay, getMonthName};
