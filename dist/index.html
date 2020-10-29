@@ -1,1 +1,182 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Production</title><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><script src="app.bundle.js"></script></body></html>
+﻿<!DOCTYPE html>
+<html lang="en" class="">
+  <head>
+    <link
+      rel="stylesheet prefetch"
+      href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.0/rangeslider.min.css"
+    />
+    <style class="cp-pen-styles"></style>
+    <link rel="stylesheet" href="../src/styles.css" type="text/css" />
+    <title>Cryptophan: Cryptocurrency Data</title>
+    <!-- <meta name="viewport" content="initial-scale=1.0;" /> -->
+    <meta
+      name="description"
+      content="Cryptocurrency statistics website with all time high (ATH) data, day of the week data, and hourly data."
+    />
+    <meta
+      name="keywords"
+      content="Cryptocurrency, data, statistics, charts, weekday, day, week, hour, ticker, coins"
+    />
+  </head>
+  <body>
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand:300,400"
+      rel="stylesheet"
+    />
+    <div class="container">
+      <div class="header">
+        <div class="date-all">
+          <div class="circle-num">
+            <div class="circle">
+              <p class="date-num"></p>
+            </div>
+          </div>
+          <div class="date">
+            <p class="date-info"></p>
+          </div>
+        </div>
+        <div class="main-title">Crypto<span class="title">phan</span></div>
+        <div class="nav">
+          <ul>
+            <li class="nav-price">Price</li>
+            <li class="nav-ath">all time high</li>
+            <li class="nav-weekday">Weekday</li>
+            <li class="nav-hourly">hourly</li>
+          </ul>
+        </div>
+      </div>
+      <div class="all-data">
+        <div class="main-data">
+          <div class="input-container">
+            <h2>Inputs</h2>
+            <div class="coinCompare">
+              <input
+                type="text"
+                class="coinEntry"
+                list="coinName"
+                autocomplete="off"
+                placeholder="Add a ticker"
+                id="coinCompare1"
+              />
+            </div>
+            <div class="coinCompare">
+              <select id="denom-choices">
+                <option value="USD">USD</option>
+                <option value="BTC">BTC</option>
+                <option value="ETH">ETH</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </div>
+            <div class="coinCompare2">
+              <input
+                type="text"
+                list="coinName"
+                autocomplete="off"
+                placeholder="Add a date"
+                id="dateEntry1"
+              />
+            </div>
+            <div class="coinCompare2">
+              <input
+                type="text"
+                list="coinName"
+                autocomplete="off"
+                placeholder="Add a date"
+                id="dateEntry2"
+              />
+            </div>
+            <div class="coinCompare2">
+              <input
+                type="text"
+                list="coinName"
+                autocomplete="off"
+                placeholder="Add a date"
+                id="dateEntry3"
+              />
+            </div>
+            <button class="submit">Submit</button>
+          </div>
+          <div class="output-container">
+            <h2>Outputs</h2>
+            <div class="currentPrice-container data-container">
+              <div class="currentPriceOutput">Current Price:</div>
+              <br />
+              <div class="allTimeHighPriceOutput">ATH:</div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-info">
+          <div class="exchange-filter">
+            <div class="exchange-prefix">Exchange:</div>
+            <select id="exchange-choices">
+              <option value="CCCAGG">All</option>
+              <option value="Coinbase">Coinbase</option>
+              <option value="Bitfinex">Bitfinex</option>
+              <option value="Poloniex">Poloniex</option>
+              <option value="Kraken">Kraken</option>
+              <option value="HitBTC">HitBTC</option>
+              <option value="Gemini">Gemini</option>
+              <option value="Bitstamp">Bitstamp</option>
+            </select>
+          </div>
+          <a href="#0" id="info" class="info popup-trigger" title="info">i</a>
+        </div>
+        <div id="myDiv"></div>
+      </div>
+    </div>
+
+    <div class="filter-container">
+      <div class="radio1 hide" id="log-toggle">
+        <input type="checkbox" value="0" id="radio1" name="radio1" />
+        <label for="radio1"><span class="radio1-text">Log Scale</span></label>
+      </div>
+      <div class="radio2 hide" id="CI-toggle">
+        <input
+          type="checkbox"
+          value="0"
+          id="radio2"
+          name="radio2"
+          checked="checked"
+        />
+        <label for="radio2"
+          ><span class="radio2-text">Confidence Interval</span></label
+        >
+      </div>
+      <div class="main-filter">
+        <input
+          class="filter1"
+          type="range"
+          min="1"
+          max="1999"
+          value="365"
+        /><input
+          type="text"
+          class="dayEntry"
+          list="coinName"
+          autocomplete="off"
+          placeholder="Insert # of days"
+          id="coinCompare2"
+        />
+      </div>
+      <div class="filter"><div class="filter-one"></div></div>
+    </div>
+
+    <div class="popup" role="alert">
+      <div class="popup-container">
+        <a href="#0" class="popup-close img-replace">Close</a>
+        Info #1
+      </div>
+    </div>
+
+    <div class="footer">Data provided via min-api.cryptocompare.com</div>
+
+    <script src="//static.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.0/rangeslider.min.js"></script>
+    <script src="../src/dateFunctions.js" type="text/javascript"></script>
+    <script src="../src/index.js" type="text/javascript"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.20.2/math.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+  </body>
+</html>
