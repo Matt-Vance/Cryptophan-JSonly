@@ -2,11 +2,10 @@
   "name": "Cryptophan",
   "version": "1.0.0",
   "description": "Cryptocurrency tracker",
-  "main": "index.js",
+  "main": "main.js",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "",
     "build": "webpack"
   },
   "repository": {
