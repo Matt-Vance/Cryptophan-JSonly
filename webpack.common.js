@@ -8,7 +8,7 @@ module.exports = {
     app: './src/index.js',
   },
   output: {
-    filename: '[name].[hash:20].js',
+    filename: '[name].js',
     path: buildPath
 },
   plugins: [
