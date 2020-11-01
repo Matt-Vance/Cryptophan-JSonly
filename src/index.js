@@ -12,15 +12,23 @@ const {
   plotPriceHistory,
   plotWeekdayChange,
   plotATHHistory,
-  plotHourlyData,
 } = require("./plots.js");
 
 let samePrice = [];
+filterDays = 365;
 let allTimeHighPrice = 0;
 let navMenuPosition = 0;
 let exchange = "CCCAGG";
 let coinNumerator = "";
 let coinDenominator = "";
+historicalPrice = [];
+historicalOpen = [];
+historicalLow = [];
+historicalHigh = [];
+historicalChange = [];
+historicalWeekday = [];
+historicalDate = [];
+
 const options = {
   method: "GET",
   headers: {
@@ -39,6 +47,42 @@ $(document).ready(function () {
   $(".date-info").html(weekDay + ", " + month + " " + dayLong + " ");
 });
 
+function plotChart() {
+  console.log("plot chart");
+  switch (navMenuPosition) {
+    case 0:
+      plotPriceHistory(
+        historicalDate,
+        historicalPrice,
+        historicalLow,
+        historicalHigh,
+        historicalOpen,
+        coinNumerator,
+        coinDenominator,
+        filterDays
+      );
+      break;
+    case 1:
+      plotWeekdayChange(
+        historicalChange,
+        historicalWeekday,
+        historicalDate,
+        coinNumerator,
+        coinDenominator
+      );
+      break;
+    case 2:
+      plotATHHistory(
+        allTimeHighRelativePrice,
+        allTimeHighRatioDates,
+        allTimeHighRatio,
+        coinNumerator,
+        coinDenominator
+      );
+      break;
+  }
+}
+
 function getHistoricalPriceData(divide) {
   console.log("getHistoricalPriceData function");
   const url =
@@ -55,13 +99,13 @@ function getHistoricalPriceData(divide) {
     .then((data) => {
       console.log(data);
       convert = 0;
-      var historicalPrice = [];
-      var historicalOpen = [];
-      var historicalLow = [];
-      var historicalHigh = [];
-      var historicalDate = [];
-      var historicalChange = [];
-      var historicalWeekday = [];
+      historicalPrice = [];
+      historicalOpen = [];
+      historicalLow = [];
+      historicalHigh = [];
+      historicalChange = [];
+      historicalWeekday = [];
+      historicalDate = [];
       allTimeHighRatio = [];
       allTimeHighRatioDates = [];
       allTimeHighRelativePrice = [];
@@ -130,116 +174,7 @@ function getHistoricalPriceData(divide) {
         }
         getCurrentPriceData(allTimeHighPrice);
         maxDaysHandle(historicalDate);
-
-        switch (navMenuPosition) {
-          case 0:
-            plotPriceHistory(
-              historicalDate,
-              historicalPrice,
-              historicalLow,
-              historicalHigh,
-              historicalOpen,
-              coinNumerator,
-              coinDenominator
-            );
-            break;
-          case 1:
-            plotWeekdayChange(
-              historicalChange,
-              historicalWeekday,
-              historicalDate,
-              coinNumerator,
-              coinDenominator
-            );
-            break;
-          case 2:
-            plotATHHistory(
-              allTimeHighRelativePrice,
-              allTimeHighRatioDates,
-              allTimeHighRatio,
-              coinNumerator,
-              coinDenominator
-            );
-            break;
-        }
-      }
-    });
-}
-
-
-function filterHistoricalPriceData() {
-      convert = 0;
-      var historicalPrice = [];
-      var historicalOpen = [];
-      var historicalLow = [];
-      var historicalHigh = [];
-      var historicalDate = [];
-      var historicalChange = [];
-      var historicalWeekday = [];
-      allTimeHighRatio = [];
-      allTimeHighRatioDates = [];
-      allTimeHighRelativePrice = [];
-      allTimeHighPrice = 0;
-      console.log(data.ConversionType.type);
-      if (data.ConversionType.type === "divide") {
-        getHistoricalPriceData(1);
-      } else {
-        for (var i = 1999; i >= 1; i--) {
-          let newDate = new Date((data.Data[i].time + 86400) * 1000).toString();
-          if (data.Data[i].close == []) {
-            i = 0;
-          } else {
-            historicalPrice.push(data.Data[i].close);
-            historicalLow.push(data.Data[i].low);
-            historicalHigh.push(data.Data[i].high);
-            historicalOpen.push(data.Data[i].open);
-            historicalDate.push(convertDateFormat(newDate));
-            var previousDayPrice = data.Data[i - 1].close;
-            var dayOfPrice = data.Data[i].close;
-            if (previousDayPrice === 0) {
-              dailyChangePrice = 0;
-            } else {
-              var dailyChangePrice = dayOfPrice / previousDayPrice - 1;
-            }
-            historicalChange.push(dailyChangePrice * 100);
-            var dayOfWeek = newDate.substr(0, 3);
-            historicalWeekday.push(dayOfWeek);
-          }
-        }
-        getCurrentPriceData(allTimeHighPrice);
-        maxDaysHandle(historicalDate);
-
-        switch (navMenuPosition) {
-          case 0:
-            plotPriceHistory(
-              historicalDate,
-              historicalPrice,
-              historicalLow,
-              historicalHigh,
-              historicalOpen,
-              coinNumerator,
-              coinDenominator
-            );
-            break;
-          case 1:
-            plotWeekdayChange(
-              historicalChange,
-              historicalWeekday,
-              historicalDate,
-              coinNumerator,
-              coinDenominator
-            );
-            break;
-          case 2:
-            plotATHHistory(
-              allTimeHighRelativePrice,
-              allTimeHighRatioDates,
-              allTimeHighRatio,
-              coinNumerator,
-              coinDenominator
-            );
-            break;
-        }
+        plotChart();
       }
     });
 }
@@ -289,9 +224,6 @@ function onSubmit() {
   coinNumerator = $("#coinCompare1").val().toUpperCase();
   coinDenominator = $("#denom-choices").val().toUpperCase();
   getHistoricalPriceData(0);
-  if (navMenuPosition === 3) {
-    getHistoricalHourlyData();
-  }
 }
 
 $(".nav-price").click(function () {
@@ -311,13 +243,6 @@ $(".nav-weekday").click(function () {
 $(".nav-ath").click(function () {
   navMenuPosition = 2;
   filterDays = 365;
-  changeHandle();
-  onSubmit();
-});
-
-$(".nav-hourly").click(function () {
-  navMenuPosition = 3;
-  filterDays = 30;
   changeHandle();
   onSubmit();
 });
@@ -380,11 +305,7 @@ function changeHandle() {
       updateHandle($handle[0], filterDays);
       $(".filter-one").html(result[filterDays] + " - " + result[0]);
       filterDays = this.value;
-      if (navMenuPosition === 3) {
-        getHistoricalHourlyData();
-      } else {
-        // onSubmit();
-      }
+      plotChart();
     });
   var $handle = $(".rangeslider__handle");
   updateHandle($handle[0], filterDays);
@@ -404,9 +325,6 @@ $(".dayEntry").on("keydown", function (e) {
   if (e.which == 13) {
     $element.val(this.value).change();
     // onSubmit();
-    if (navMenuPosition === 3) {
-      getHistoricalHourlyData();
-    }
     changeHandle();
   }
 });
@@ -417,157 +335,9 @@ $(".coinEntry").on("keydown", function (e) {
     console.log(coinNumerator);
     coinDenominator = $("#denom-choices").val().toUpperCase();
     console.log(coinDenominator);
-    getHistoricalPriceData();
-    if (navMenuPosition === 3) {
-      getHistoricalHourlyData();
-    }
+    getHistoricalPriceData(0);
   }
 });
-
-function getHistoricalHourlyData() {
-  var hourlyDate = [];
-  var hourlyLongDate = [];
-  var hourlyHour = [];
-  var hourlyPrice = [];
-  var hourlyPriceChange = [];
-  $.get(
-    "https://min-api.cryptocompare.com/data/histohour?fsym=" +
-      coinNumerator +
-      "&tsym=" +
-      coinDenominator +
-      "&limit=2000&aggregate=1&e=" +
-      exchange,
-    function (data, status) {
-      if (data.ConversionType.type === "divide") {
-        getHistoricalHourlyDataAlt();
-      } else {
-        for (i = 2001 - filterDays * 24; i <= data.Data.length - 1; i++) {
-          var hourlyDateInt = new Date(data.Data[i].time * 1000);
-          var hourlyHourInt = hourlyDateInt.toString().slice(16, 18);
-          var hourlyPriceInt = data.Data[i].close;
-          var hourlyPriceChangeInt =
-            100 * (data.Data[i].close / data.Data[i].open - 1);
-          hourlyDate.push(hourlyDateInt.toString().slice(4, 15));
-          hourlyLongDate.push(hourlyDateInt.toString().slice(4, 21));
-          hourlyHour.push(hourlyHourInt);
-          hourlyPrice.push(hourlyPriceInt);
-          hourlyPriceChange.push(hourlyPriceChangeInt);
-        }
-        groups3 = {};
-        $.each(hourlyHour, function (ind, itm) {
-          if (!groups3[itm]) {
-            groups3[itm] = { hourValues: [] };
-          }
-          groups3[itm].hourValues.push(hourlyPriceChange[ind]); // sum values belonging to same key
-        });
-        var hourlyChangeAverage = [];
-        var hourlyChangeMedian = [];
-        var hourlyChangeStd = [];
-        var hourlyCI = [];
-        for (var i = 0; i <= 23; i++) {
-          hourlyChangeAverage.push(
-            math.mean(groups3[hourlyHour[i]].hourValues)
-          );
-          hourlyChangeStd.push(math.std(groups3[hourlyHour[i]].hourValues));
-          hourlyCI.push(
-            1.96 *
-              (hourlyChangeStd[i] /
-                math.sqrt(groups3[hourlyHour[i]].hourValues.length))
-          );
-        }
-        var errorBars = {
-          x: hourlyHour.slice(-filterDays * 24),
-          y: hourlyChangeAverage.slice(-filterDays * 24),
-          error_y: {
-            type: "data",
-            array: hourlyCI,
-            visible: true,
-          },
-          mode: "markers",
-          type: "scatter",
-        };
-        plotHourlyData(
-          hourlyLongDate,
-          hourlyDate,
-          hourlyHour,
-          hourlyPrice,
-          errorBars,
-          hourlyPriceChange
-        );
-      }
-    }
-  );
-}
-
-function getHistoricalHourlyDataAlt() {
-  var hourlyDate = [];
-  var hourlyLongDate = [];
-  var hourlyHour = [];
-  var hourlyPrice = [];
-  var hourlyPriceChange = [];
-  $.get(
-    "https://min-api.cryptocompare.com/data/histohour?fsym=" +
-      coinNumerator +
-      "&tsym=" +
-      coinDenominator +
-      "&limit=2000&aggregate=1&e=" +
-      exchange +
-      "&tryConversion=false",
-    function (data, status) {
-      for (i = 2001 - filterDays * 24; i <= data.Data.length - 1; i++) {
-        var hourlyDateInt = new Date(data.Data[i].time * 1000);
-        var hourlyHourInt = hourlyDateInt.toString().slice(16, 18);
-        var hourlyPriceInt = data.Data[i].close;
-        var hourlyPriceChangeInt =
-          100 * (data.Data[i].close / data.Data[i].open - 1);
-        hourlyDate.push(hourlyDateInt.toString().slice(4, 15));
-        hourlyLongDate.push(hourlyDateInt.toString().slice(4, 21));
-        hourlyHour.push(hourlyHourInt);
-        hourlyPrice.push(hourlyPriceInt);
-        hourlyPriceChange.push(hourlyPriceChangeInt);
-      }
-      groups3 = {};
-      $.each(hourlyHour, function (ind, itm) {
-        if (!groups3[itm]) {
-          groups3[itm] = { hourValues: [] };
-        }
-        groups3[itm].hourValues.push(hourlyPriceChange[ind]); // sum values belonging to same key
-      });
-      var hourlyChangeAverage = [];
-      var hourlyChangeStd = [];
-      var hourlyCI = [];
-      for (var i = 0; i <= 23; i++) {
-        hourlyChangeAverage.push(math.mean(groups3[hourlyHour[i]].hourValues));
-        hourlyChangeStd.push(math.std(groups3[hourlyHour[i]].hourValues));
-        hourlyCI.push(
-          1.96 *
-            (hourlyChangeStd[i] /
-              math.sqrt(groups3[hourlyHour[i]].hourValues.length))
-        );
-      }
-      var errorBars = {
-        x: hourlyHour.slice(-filterDays * 24),
-        y: hourlyChangeAverage.slice(-filterDays * 24),
-        error_y: {
-          type: "data",
-          array: hourlyCI,
-          visible: true,
-        },
-        mode: "markers",
-        type: "scatter",
-      };
-      plotHourlyData(
-        hourlyLongDate,
-        hourlyDate,
-        hourlyHour,
-        hourlyPrice,
-        errorBars,
-        hourlyPriceChange,
-        hourlyChangeMedian
-      );
-    }
-  );
-}
 
 document
   .getElementById("exchange-choices")
@@ -590,7 +360,6 @@ jQuery(document).ready(function ($) {
     0: "The Price chart shows the daily close price of a given coin pairing (see chart title) over time",
     1: "The Weekday chart shows the amount of daily change (close/open - 1) for each weekday over a given time period. A confidence interval is calculated and shown with Error Bars. Data is based on GMT time but the suggested time to make decisions is listed on the chart and is based on the timezone given by your network.",
     2: "The All Time High chart shows the close price of each day versus the ATH reached prior to that date. For instance, if on January 1st an ATH of $100 was reached but on January 2nd our close price was $110, the value on the chart for Jan 2 would show 110% of ATH for that day. However, if on January 3rd the price stayed stable at $110, the chart value for Jan 3 would be 100%. This may be a useful tool for setting limit buys as it suggests the absolute lowest the price dropped relative to historical ATHs in the past.",
-    3: "The Hourly chart shows the amount of hourly change (close/open - 1) for up to the past 2000 hours. The goal of the chart is to identify patterns in price action based on time zone. As with the Weekly chart, confidence intervals are used.",
   };
   //open popup
   $(".popup-trigger").on("click", function (event) {

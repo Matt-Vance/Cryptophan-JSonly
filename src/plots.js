@@ -21,7 +21,8 @@ function plotPriceHistory(
   historicalHigh,
   historicalOpen,
   coinNumerator,
-  coinDenominator
+  coinDenominator,
+  filterDays
 ) {
   var trace3 = {
     x: historicalDate.slice(0, filterDays),
@@ -90,6 +91,7 @@ function plotPriceHistory(
     plotData = [trace3];
   }
 
+  console.log(plotData)
   Plotly.newPlot(gd, plotData, layout);
   $(".radio2").addClass("hide");
   $(".radio1").removeClass("hide");
@@ -357,70 +359,8 @@ function plotATHHistory(
   };
 }
 
-function plotHourlyData(
-  hourlyLongDate,
-  hourlyDate,
-  hourlyHour,
-  hourlyPrice,
-  errorBars,
-  hourlyPriceChange,
-  hourlyChangeMedian
-) {
-  var trace1 = {
-    x: hourlyHour.slice(-filterDays * 24),
-    y: hourlyPriceChange.slice(-filterDays * 24),
-    mode: "markers",
-    name: "Close price",
-    type: "scatter",
-  };
-
-  var layout = {
-    title: "Hourly Change " + coinNumerator + " vs " + coinDenominator,
-    xaxis: {
-      title: "Hour (Local Time)",
-      titlefont: {
-        family: "Courier New, monospace",
-        size: 18,
-        color: "#7f7f7f",
-      },
-      fixedrange: true,
-    },
-    yaxis: {
-      title: "% Change" + " " + coinDenominator,
-      type: "linear",
-      autorange: true,
-      titlefont: {
-        family: "Courier New, monospace",
-        size: 18,
-        color: "#7f7f7f",
-      },
-      fixedrange: true,
-    },
-  };
-  var dataSetPlotted = errorBars;
-  var plotData = [dataSetPlotted];
-
-  Plotly.newPlot("myDiv", plotData, layout);
-
-  Plotly.relayout("myDiv", {
-    "xaxis.categoryarray": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-  });
-  $(".radio1").addClass("hide");
-  $(".radio2").removeClass("hide");
-  $("#radio2").click(function () {
-    if (dataSetPlotted === errorBars) {
-      dataSetPlotted = trace1;
-    } else {
-      dataSetPlotted = errorBars;
-    }
-    var plotData = [dataSetPlotted];
-    Plotly.newPlot("myDiv", plotData, layout);
-  });
-}
-
 module.exports = {
   plotPriceHistory,
   plotWeekdayChange,
-  plotATHHistory,
-  plotHourlyData,
+  plotATHHistory
 };
