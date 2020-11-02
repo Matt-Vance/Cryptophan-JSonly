@@ -6,7 +6,6 @@ const {
   getWeekDay,
   getMonthName,
   last2000Days,
-  formatDate,
 } = require("./dateFunctions.js");
 const {
   plotPriceHistory,
@@ -14,13 +13,13 @@ const {
   plotATHHistory,
 } = require("./plots.js");
 
-let samePrice = [];
 filterDays = 365;
 let allTimeHighPrice = 0;
 let navMenuPosition = 0;
 let exchange = "CCCAGG";
 let coinNumerator = "";
 let coinDenominator = "";
+let priorCoinQuery = "";
 historicalPrice = [];
 historicalOpen = [];
 historicalLow = [];
@@ -28,7 +27,7 @@ historicalHigh = [];
 historicalChange = [];
 historicalWeekday = [];
 historicalDate = [];
-
+currentPrice = 0;
 const options = {
   method: "GET",
   headers: {
@@ -48,7 +47,6 @@ $(document).ready(function () {
 });
 
 function plotChart() {
-  console.log("plot chart");
   switch (navMenuPosition) {
     case 0:
       plotPriceHistory(
@@ -59,7 +57,8 @@ function plotChart() {
         historicalOpen,
         coinNumerator,
         coinDenominator,
-        filterDays
+        filterDays,
+        currentPrice
       );
       break;
     case 1:
@@ -68,7 +67,8 @@ function plotChart() {
         historicalWeekday,
         historicalDate,
         coinNumerator,
-        coinDenominator
+        coinDenominator,
+        filterDays
       );
       break;
     case 2:
@@ -77,14 +77,17 @@ function plotChart() {
         allTimeHighRatioDates,
         allTimeHighRatio,
         coinNumerator,
-        coinDenominator
+        coinDenominator,
+        filterDays
       );
       break;
   }
 }
 
 function getHistoricalPriceData(divide) {
-  console.log("getHistoricalPriceData function");
+  if (coinNumerator + coinDenominator === priorCoinQuery) {
+    return;
+  }
   const url =
     "https://min-api.cryptocompare.com/data/histoday?fsym=" +
     coinNumerator +
@@ -97,7 +100,6 @@ function getHistoricalPriceData(divide) {
   fetch(urlEntered, options)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       convert = 0;
       historicalPrice = [];
       historicalOpen = [];
@@ -110,14 +112,18 @@ function getHistoricalPriceData(divide) {
       allTimeHighRatioDates = [];
       allTimeHighRelativePrice = [];
       allTimeHighPrice = 0;
-      console.log(data.ConversionType.type);
+      var startDay = 0;
+      console.log(data);
+      priorCoinQuery = coinNumerator + coinDenominator;
+      console.log(priorCoinQuery);
       if (data.ConversionType.type === "divide") {
         getHistoricalPriceData(1);
       } else {
         for (var i = 1999; i >= 1; i--) {
           let newDate = new Date((data.Data[i].time + 86400) * 1000).toString();
-          if (data.Data[i].close == []) {
+          if (data.Data[i].close == 0) {
             i = 0;
+            staryDay = i;
           } else {
             historicalPrice.push(data.Data[i].close);
             historicalLow.push(data.Data[i].low);
@@ -132,91 +138,51 @@ function getHistoricalPriceData(divide) {
               var dailyChangePrice = dayOfPrice / previousDayPrice - 1;
             }
             historicalChange.push(dailyChangePrice * 100);
-            if (
-              data.Data[i].high > allTimeHighPrice &&
-              data.Data[i].high <= 5 * data.Data[i].close
-            ) {
-              var allTimeHighDate = new Date(
-                (data.Data[i].time + 86400) * 1000
-              );
-              var athRatio = (100 * data.Data[i].close) / allTimeHighPrice;
-              if (athRatio <= 500) {
-                allTimeHighRatio.push(athRatio);
-              } else {
-                allTimeHighRatio.push(100);
-              }
-              allTimeHighRelativePrice.push(data.Data[i].close);
-              var ratioDate = new Date((data.Data[i].time + 86400) * 1000);
-              allTimeHighRatioDates.push(allTimeHighDate);
-              allTimeHighPrice = data.Data[i].high;
-            } else if (allTimeHighPrice !== 0) {
-              var athRatio = (100 * data.Data[i].close) / allTimeHighPrice;
-              if (athRatio <= 500) {
-                allTimeHighRatio.push(athRatio);
-              } else {
-                allTimeHighRatio.push(100);
-              }
-              allTimeHighRelativePrice.push(data.Data[i].close);
-              var ratioDate = new Date((data.Data[i].time + 86400) * 1000);
-              allTimeHighRatioDates.push(ratioDate);
-            }
-            $(".allTimeHighPriceOutput").html(
-              "ATH of " +
-                coinNumerator +
-                ": " +
-                allTimeHighPrice +
-                "</br> on " +
-                allTimeHighDate.toString().substring(4, 15)
-            );
-            var dayOfWeek = newDate.substr(0, 3);
-            historicalWeekday.push(dayOfWeek);
           }
+
+          var dayOfWeek = newDate.substr(0, 3);
+          historicalWeekday.push(dayOfWeek);
         }
-        getCurrentPriceData(allTimeHighPrice);
-        maxDaysHandle(historicalDate);
-        plotChart();
       }
+      for (var i = startDay; i <= 1999; i++) {
+        if (
+          data.Data[i].high > allTimeHighPrice &&
+          data.Data[i].high <= 5 * data.Data[i].close
+        ) {
+          var allTimeHighDate = new Date((data.Data[i].time + 86400) * 1000);
+          var athRatio = (100 * data.Data[i].close) / allTimeHighPrice;
+          if (athRatio <= 500) {
+            allTimeHighRatio.push(athRatio);
+          } else {
+            allTimeHighRatio.push(100);
+          }
+          allTimeHighRelativePrice.push(data.Data[i].close);
+          allTimeHighRatioDates.push(allTimeHighDate);
+          allTimeHighPrice = data.Data[i].high;
+        } else if (allTimeHighPrice !== 0) {
+          var athRatio = (100 * data.Data[i].close) / allTimeHighPrice;
+          if (athRatio <= 500) {
+            allTimeHighRatio.push(athRatio);
+          } else {
+            allTimeHighRatio.push(100);
+          }
+          allTimeHighRelativePrice.push(data.Data[i].close);
+          var ratioDate = new Date((data.Data[i].time + 86400) * 1000);
+          allTimeHighRatioDates.push(ratioDate);
+          $(".allTimeHighPriceOutput").html(
+            "ATH of " +
+              coinNumerator +
+              ": " +
+              allTimeHighPrice +
+              "</br> on " +
+              allTimeHighDate.toString().substring(4, 15)
+          );
+        }
+      }
+      getCurrentPriceData(allTimeHighPrice);
+      maxDaysHandle(historicalDate);
     });
 }
-
-// function getRecentEqualPrices(
-//   historicalPrice,
-//   historicalLow,
-//   historicalHigh,
-//   historicalOpen,
-//   historicalDate,
-//   historicalWeekday,
-//   historicalChange,
-//   allTimeHighRatio,
-//   allTimeHighRatioDates,
-//   allTimeHighRelativePrice
-// ) {
-//   switch (navMenuPosition) {
-//     case 0:
-//       plotPriceHistory(
-//         historicalDate,
-//         historicalPrice,
-//         historicalLow,
-//         historicalHigh,
-//         historicalOpen,
-//       );
-//       break;
-//     case 1:
-//       plotWeekdayChange(
-//         historicalChange,
-//         historicalWeekday,
-//         historicalDate,
-//       );
-//       break;
-//     case 2:
-//       plotATHHistory(
-//         allTimeHighRelativePrice,
-//         allTimeHighRatioDates,
-//         allTimeHighRatio
-//       );
-//       break;
-//   }
-// }
 
 $(".submit").click(onSubmit);
 
@@ -230,24 +196,25 @@ $(".nav-price").click(function () {
   navMenuPosition = 0;
   filterDays = 365;
   changeHandle();
-  onSubmit();
+  plotChart();
 });
 
 $(".nav-weekday").click(function () {
   navMenuPosition = 1;
   filterDays = 30;
   changeHandle();
-  onSubmit();
+  plotChart();
 });
 
 $(".nav-ath").click(function () {
   navMenuPosition = 2;
   filterDays = 365;
   changeHandle();
-  onSubmit();
+  plotChart();
 });
 
 function getCurrentPriceData(allTimeHighPrice) {
+  console.log("getcurrentprice");
   const url =
     "https://min-api.cryptocompare.com/data/price?fsym=" +
     coinNumerator +
@@ -283,6 +250,7 @@ function getCurrentPriceData(allTimeHighPrice) {
             "</br> (100% of ATH)"
         );
       }
+      plotChart();
     });
 }
 
@@ -324,7 +292,6 @@ function maxDaysHandle(historicalDate) {
 $(".dayEntry").on("keydown", function (e) {
   if (e.which == 13) {
     $element.val(this.value).change();
-    // onSubmit();
     changeHandle();
   }
 });
@@ -332,9 +299,7 @@ $(".dayEntry").on("keydown", function (e) {
 $(".coinEntry").on("keydown", function (e) {
   if (e.which == 13) {
     coinNumerator = $("#coinCompare1").val().toUpperCase();
-    console.log(coinNumerator);
     coinDenominator = $("#denom-choices").val().toUpperCase();
-    console.log(coinDenominator);
     getHistoricalPriceData(0);
   }
 });
@@ -344,6 +309,7 @@ document
   .addEventListener("change", exchangeChange);
 function exchangeChange() {
   exchange = this.value;
+  priorCoinQuery = "";
   onSubmit();
 }
 

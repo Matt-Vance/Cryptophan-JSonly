@@ -22,7 +22,8 @@ function plotPriceHistory(
   historicalOpen,
   coinNumerator,
   coinDenominator,
-  filterDays
+  filterDays, 
+  currentPrice
 ) {
   var trace3 = {
     x: historicalDate.slice(0, filterDays),
@@ -68,21 +69,21 @@ function plotPriceHistory(
       },
       fixedrange: true,
     },
-    // shapes: [
-    //   {
-    //     type: "line",
-    //     xref: "paper",
-    //     x0: 0,
-    //     x1: 1,
-    //     y0: currentPrice,
-    //     y1: currentPrice,
-    //     line: {
-    //       color: "rgb(50, 11, 96)",
-    //       width: 1,
-    //       dash: "dashdot",
-    //     },
-    //   },
-    // ],
+    shapes: [
+      {
+        type: "line",
+        xref: "paper",
+        x0: 0,
+        x1: 1,
+        y0: currentPrice,
+        y1: currentPrice,
+        line: {
+          color: "rgb(50, 11, 96)",
+          width: 1,
+          dash: "dashdot",
+        },
+      },
+    ],
   };
 
   if (convert === 0) {
@@ -91,7 +92,6 @@ function plotPriceHistory(
     plotData = [trace3];
   }
 
-  console.log(plotData)
   Plotly.newPlot(gd, plotData, layout);
   $(".radio2").addClass("hide");
   $(".radio1").removeClass("hide");
@@ -111,7 +111,10 @@ function plotPriceHistory(
 function plotWeekdayChange(
   historicalChange,
   historicalWeekday,
-  historicalDate
+  historicalDate,
+  coinNumerator, 
+  coinDenominator, 
+  filterDays
 ) {
   historicalChange = historicalChange.slice(0, filterDays);
   historicalWeekday = historicalWeekday.slice(0, filterDays);
@@ -292,7 +295,8 @@ function plotATHHistory(
   allTimeHighRatioDates,
   allTimeHighRatio,
   coinNumerator,
-  coinDenominator
+  coinDenominator, 
+  filterDays
 ) {
   var trace1 = {
     x: allTimeHighRatioDates.slice(-filterDays),
@@ -342,7 +346,6 @@ function plotATHHistory(
   };
 
   var plotData = [trace1];
-
   Plotly.newPlot(gd, plotData, layout);
   $(".radio2").addClass("hide");
   $(".radio1").removeClass("hide");
@@ -362,5 +365,5 @@ function plotATHHistory(
 module.exports = {
   plotPriceHistory,
   plotWeekdayChange,
-  plotATHHistory
+  plotATHHistory,
 };
