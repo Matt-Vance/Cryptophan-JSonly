@@ -17,8 +17,8 @@ filterDays = 365;
 let allTimeHighPrice = 0;
 let navMenuPosition = 0;
 let exchange = "CCCAGG";
-let coinNumerator = "";
-let coinDenominator = "";
+let coinNumerator = "BTC";
+let coinDenominator = "USD";
 let priorCoinQuery = "";
 historicalPrice = [];
 historicalOpen = [];
@@ -115,7 +115,6 @@ function getHistoricalPriceData(divide) {
       var startDay = 0;
       console.log(data);
       priorCoinQuery = coinNumerator + coinDenominator;
-      console.log(priorCoinQuery);
       if (data.ConversionType.type === "divide") {
         getHistoricalPriceData(1);
       } else {
@@ -320,6 +319,8 @@ function denomChange() {
   coinDenominator = this.value;
   onSubmit();
 }
+
+getHistoricalPriceData(0);
 
 jQuery(document).ready(function ($) {
   var popupInfo = {
