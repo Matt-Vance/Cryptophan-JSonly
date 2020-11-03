@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const compression = require("compression");
+require("./src/styles.css");
 
 const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
