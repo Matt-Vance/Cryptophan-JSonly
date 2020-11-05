@@ -113,7 +113,6 @@ function getHistoricalPriceData(divide) {
       allTimeHighRelativePrice = [];
       allTimeHighPrice = 0;
       var startDay = 0;
-      console.log(data);
       priorCoinQuery = coinNumerator + coinDenominator;
       if (data.ConversionType.type === "divide") {
         getHistoricalPriceData(1);
@@ -213,7 +212,6 @@ $(".nav-ath").click(function () {
 });
 
 function getCurrentPriceData(allTimeHighPrice) {
-  console.log("getcurrentprice");
   const url =
     "https://min-api.cryptocompare.com/data/price?fsym=" +
     coinNumerator +
